@@ -13,7 +13,7 @@ chat_config:
   backend: transformers # lmdeploy / vllm / transformers / api / lmdeploy_queue / vllm_queue / vllm_async
   data_parallelism: 1 # for lmdeploy only (test)
   model_parallelism: 1 # for lmdeploy and vllm
-  batch_size: 10 # active when using `transformers` as backend
+  batch_size: 1 # active when using `transformers` as backend
   # if using xxx_queue as backend
   queue_config:
     max_batch_size: 256 # maximum batch size for internal processing
