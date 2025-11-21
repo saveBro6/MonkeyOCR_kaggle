@@ -16,6 +16,7 @@ from openai import OpenAI
 import asyncio
 import uuid
 
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 class MonkeyOCR:
     def __init__(self, config_path):
@@ -247,7 +248,7 @@ class MonkeyChat_transformers:
         self.max_batch_size = max_batch_size
         self.max_new_tokens = max_new_tokens
         
-        self.device_map = "auto"   
+        self.device_map = "balanced_low_0"   
 
         if device is None:
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
