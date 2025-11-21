@@ -272,7 +272,7 @@ class MonkeyChat_transformers:
                         model_path,
                         torch_dtype=torch.bfloat16 if bf16_supported else torch.float16,
                         attn_implementation="eager" if self.device.startswith("cuda") else 'sdpa',
-                        device_map=self.device,
+                        device_map=self.device_map,
                     )
                 
             self.processor = AutoProcessor.from_pretrained(
