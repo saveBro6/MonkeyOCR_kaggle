@@ -213,7 +213,6 @@ class MonkeyChat_vLLM:
                         gpu_memory_utilization=self._auto_gpu_mem_ratio(0.9),
                         tensor_parallel_size=tp)
         self.gen_config = SamplingParams(max_tokens=4096,temperature=0,repetition_penalty=1.05)
-        self.device_map='auto'
     def _auto_gpu_mem_ratio(self, ratio):
         mem_free, mem_total = torch.cuda.mem_get_info()
         ratio = ratio * mem_free / mem_total
@@ -248,8 +247,7 @@ class MonkeyChat_transformers:
         self.max_batch_size = max_batch_size
         self.max_new_tokens = max_new_tokens
         
-        if torch.cuda.device_count() > 1:
-            self.device_map = "auto"   
+        self.device_map = "auto"   
 
         if device is None:
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
