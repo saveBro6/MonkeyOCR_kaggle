@@ -357,12 +357,21 @@ class MonkeyChat_transformers:
             
             image_inputs.append(process_vision_info(messages)[0])
         
+        # --- ĐOẠN SỬA ---
+        # 1. Xác định device thực tế của layer đầu tiên trong model
+        # Nếu dùng nhiều GPU, nó có thể là cuda:1 thay vì self.device (cuda:0)
+        if hasattr(self.model, "hf_device_map"):
+            target_device = next(self.model.parameters()).device
+        else:
+            target_device = self.device
+
+        # 2. Đẩy input vào đúng device đó
         inputs = self.processor(
             text=texts,
             images=image_inputs,
             padding=True,
             return_tensors="pt",
-        ).to(self.device)
+        ).to(target_device)
         
         with torch.no_grad():
             generated_ids = self.model.generate(
