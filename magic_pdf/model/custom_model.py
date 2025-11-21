@@ -213,7 +213,7 @@ class MonkeyChat_vLLM:
                         gpu_memory_utilization=self._auto_gpu_mem_ratio(0.9),
                         tensor_parallel_size=tp)
         self.gen_config = SamplingParams(max_tokens=4096,temperature=0,repetition_penalty=1.05)
-    
+        self.device_map='auto'
     def _auto_gpu_mem_ratio(self, ratio):
         mem_free, mem_total = torch.cuda.mem_get_info()
         ratio = ratio * mem_free / mem_total
