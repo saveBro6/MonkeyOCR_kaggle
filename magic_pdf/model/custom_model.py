@@ -250,8 +250,14 @@ class MonkeyChat_transformers:
         
         if device is None:
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+            
+            if torch.cuda.device_count() > 1:
+                self.device_map = "auto"   
+            else:
+                self.device_map = None
         else:
             self.device = device
+            self.device_map = None
         
         bf16_supported = False
         if self.device.startswith("cuda"):
@@ -268,7 +274,7 @@ class MonkeyChat_transformers:
                         model_path,
                         torch_dtype=torch.bfloat16 if bf16_supported else torch.float16,
                         attn_implementation="eager" if self.device.startswith("cuda") else 'sdpa',
-                        device_map=self.device,
+                        device_map=self.device_map,
                     )
                 
             self.processor = AutoProcessor.from_pretrained(
